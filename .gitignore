@@ -70,3 +70,14 @@ crashlytics-build.properties
 # Temporary auto-generated Android Assets
 /[Aa]ssets/[Ss]treamingAssets/aa.meta
 /[Aa]ssets/[Ss]treamingAssets/aa/*
+
+
+/Diamond Rush/.vscode
+/Diamond Rush/Library
+/Diamond Rush/Logs
+/Diamond Rush/Packages
+/Diamond Rush/ProjectSettings
+/Diamond Rush/Temp
+/Diamond Rush/UserSettings
+
+gitignore
