@@ -6,8 +6,11 @@ using UnityEngine.UI;
 public class gameplay : MonoBehaviour
 {
     public GameObject diamonds;
+    public GameObject leaderboard;
+    public GameObject closeBTN;
     public Text scoreText;
     public Text startTimerText;
+    public Text pbScoreText;
     int count;
 
     public float timeLeft;
@@ -33,7 +36,7 @@ public class gameplay : MonoBehaviour
             startTimerText.text = "";
             timerOn = true;
             //enable gems
-            scoreText.text = "Gem: 0/9";
+            scoreText.text = "Gems: 0/9";
             diamonds.SetActive(true);
 
         }
@@ -41,6 +44,14 @@ public class gameplay : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        // ZA WARUDO
+        if (Input.GetKeyDown(KeyCode.Escape)) {
+            Time.timeScale = 0;
+        }
+        // Resume time
+        if(Input.GetKeyUp(KeyCode.Escape)) {
+            Time.timeScale = 1;
+        }
             if(timerOn) {
                 // if(timeLeft < 0) {
                 //     timeLeft += Time.deltaTime;
@@ -56,6 +67,9 @@ public class gameplay : MonoBehaviour
             }
         if(count == 9) {
             timerOn = false;
+            pbScoreText.text = timerText.text;
+            leaderboard.SetActive(true);
+            closeBTN.SetActive(true);
         }
     }
     void updateTimer(float currentTime) {
