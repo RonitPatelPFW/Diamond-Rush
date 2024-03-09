@@ -8,10 +8,15 @@ public class SceneManagement : MonoBehaviour
 {
     public GameObject howto;
     public GameObject pb;
+    public GameObject settings;
+
     public GameObject gameOver;
 
     public void playGame() {
+
+        // gameOver.SetActive(false);        
         SceneManager.LoadScene("Game");
+        
     }
 
     public void mainMenu() {
@@ -24,18 +29,33 @@ public class SceneManagement : MonoBehaviour
     }
 
     public void howToPlay() {
-        howto.SetActive(true);
-
-    }
-
-    public void exitHowToPlay() {
-        howto.SetActive(false);
+        if(!howto.activeSelf) {
+            howto.SetActive(true);
+        }
+        else {
+            howto.SetActive(false);
+        }
 
     }
 
     public void closePB() {
-        pb.SetActive(false);
-        gameOver.SetActive(true);
 
+        if(!pb.activeSelf) {
+            pb.SetActive(true);  
+        }
+        else {
+            pb.SetActive(false);  
+        }
+    }
+
+    public void openSetting() {
+        if(!settings.activeSelf) {
+            Time.timeScale = 0;
+            settings.SetActive(true);
+        }
+        else {
+            settings.SetActive(false);
+            Time.timeScale = 1;
+        }
     }
 }
