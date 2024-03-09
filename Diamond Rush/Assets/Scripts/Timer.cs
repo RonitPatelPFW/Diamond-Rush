@@ -23,11 +23,14 @@ public class Timer : MonoBehaviour
 
     private bool callOnce = false;
 
+
     void Start()
     {
-        text1.text = PlayerPrefs.GetFloat("Player PB1").ToString();
-        text2.text = PlayerPrefs.GetFloat("Player PB2").ToString();
-        text3.text = PlayerPrefs.GetFloat("Player PB3").ToString();
+
+        text1.text = PlayerPrefs.GetFloat("Player PB1").ToString("0.###");
+        text2.text = PlayerPrefs.GetFloat("Player PB2").ToString("0.###");
+        text3.text = PlayerPrefs.GetFloat("Player PB3").ToString("0.###");
+
         StartCoroutine(startEvent());
         Time.timeScale = 1;
     }
@@ -63,49 +66,42 @@ public class Timer : MonoBehaviour
             if(!callOnce) {
                 callOnce = true;
                 timerOn = false;
-                PlayerPrefs.SetFloat("Player Time", timeLeft);
-                float playerTime = Mathf.Round(PlayerPrefs.GetFloat("Player Time") * 1000f) / 1000f;
-                float pb1 = Mathf.Round(PlayerPrefs.GetFloat("Player PB1") * 1000f) / 1000f;
-                float pb2 = Mathf.Round(PlayerPrefs.GetFloat("Player PB2") * 1000f) / 1000f;
-                float pb3 = Mathf.Round(PlayerPrefs.GetFloat("Player PB3") * 1000f) / 1000f;
 
-                text1.text = PlayerPrefs.GetFloat("Player PB1").ToString();
-                text2.text = PlayerPrefs.GetFloat("Player PB2").ToString();
-                text3.text = PlayerPrefs.GetFloat("Player PB3").ToString();
-                if (playerTime < pb1) {
+                float pb1 = float.Parse(text1.text);
+                float pb2 = float.Parse(text2.text);
+                float pb3 = float.Parse(text3.text);
+
+                if (timeLeft < pb1) {
                     PlayerPrefs.SetFloat("Player PB3", pb2);
                     PlayerPrefs.SetFloat("Player PB2", pb1);
-                    PlayerPrefs.SetFloat("Player PB1", playerTime);
-                    text1.text = playerTime.ToString("0.###"); // Round and format the time
-                    text2.text = pb2.ToString("0.###");
-                    text3.text = pb3.ToString("0.###");
+                    PlayerPrefs.SetFloat("Player PB1", timeLeft);
+                    
+                    text3.text = pb2.ToString("0.###");
+                    text2.text = pb1.ToString("0.###");
+                    text1.text = timeLeft.ToString("0.###");
                 }
-                else if (playerTime < pb2) {
+                else if (timeLeft < pb2) {
                     PlayerPrefs.SetFloat("Player PB3", pb2);
-                    PlayerPrefs.SetFloat("Player PB2", playerTime);
-                    text2.text = playerTime.ToString("0.###"); // Round and format the time
-                    text3.text = pb3.ToString("0.###");
+                    PlayerPrefs.SetFloat("Player PB2", timeLeft);
+                    text3.text = pb2.ToString("0.###");
+                    text2.text = timeLeft.ToString("0.###"); 
                 }
-                else if (playerTime < pb3) {
-                    PlayerPrefs.SetFloat("Player PB3", playerTime);
-                    text3.text = playerTime.ToString("0.###"); // Round and format the time
+                else if (timeLeft < pb3) {
+                    PlayerPrefs.SetFloat("Player PB3", timeLeft);
+                    text3.text = timeLeft.ToString("0.###");
                 }
                 else if (pb1 == 0) {
-                    PlayerPrefs.SetFloat("Player PB1", playerTime);
-                    text1.text = playerTime.ToString("0.###"); // Round and format the time
+                    PlayerPrefs.SetFloat("Player PB1", timeLeft);
+                    text1.text = timeLeft.ToString("0.###");
                 }
-                else if (playerTime > pb1 && pb2 == 0) {
-                    PlayerPrefs.SetFloat("Player PB2", playerTime);
-                    text2.text = playerTime.ToString("0.###"); // Round and format the time
+                else if (timeLeft > pb1 && pb2 == 0) {
+                    PlayerPrefs.SetFloat("Player PB2", timeLeft);
+                    text2.text = timeLeft.ToString("0.###");
                 }
-                else if (playerTime > pb2 && pb3 == 0) {
-                    PlayerPrefs.SetFloat("Player PB3", playerTime);
-                    text3.text = playerTime.ToString("0.###"); // Round and format the time
+                else if (timeLeft > pb2 && pb3 == 0) {
+                    PlayerPrefs.SetFloat("Player PB3", timeLeft);
+                    text3.text = timeLeft.ToString("0.###");
                 } 
-                Debug.Log("Time: " + playerTime);
-                Debug.Log("1: " + pb1);
-                Debug.Log("2: " + pb2);
-                Debug.Log("3: " + pb3);
 
                 if(gameOver != null) {
                     gameOver.SetActive(true);
