@@ -15,23 +15,36 @@ public class Timer : MonoBehaviour
     public Text timerText;
     public Text scoreText;
 
-    public float timeLeft;
-    public bool timerOn = false;
+    private float timeLeft;
+    private bool timerOn = false;
     public Text startTimerText;
 
     private int diamondsCount;
 
     private bool callOnce = false;
 
-
+    public bool ifGameScene;
+    float pb1;
+    float pb2;
+    float pb3;
     void Start()
     {
-
         text1.text = PlayerPrefs.GetFloat("Player PB1").ToString("0.###");
+        if(text1.text == "0") {
+            text1.text = "";
+        }
         text2.text = PlayerPrefs.GetFloat("Player PB2").ToString("0.###");
+        if(text2.text == "0") {
+            text2.text = "";
+        }
         text3.text = PlayerPrefs.GetFloat("Player PB3").ToString("0.###");
-
-        StartCoroutine(startEvent());
+        if(text3.text == "0") {
+            text3.text = "";
+        }
+        
+        if(ifGameScene) {
+            StartCoroutine(startEvent());
+        }
         Time.timeScale = 1;
     }
     IEnumerator startEvent()
@@ -55,59 +68,71 @@ public class Timer : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (diamonds != null) {
-            diamondsCount = diamonds.transform.childCount;
-        }
+       
+        if(ifGameScene) {
+            if (diamonds != null) {
+                diamondsCount = diamonds.transform.childCount;
+            }
             if(timerOn) {
                 timeLeft += Time.deltaTime;
                 updateTimer(timeLeft);
             }
-        if(diamondsCount == 0) {
-            if(!callOnce) {
-                callOnce = true;
-                timerOn = false;
+            if(diamondsCount == 0 && !callOnce) {
+                    callOnce = true;
+                    timerOn = false;
 
-                float pb1 = float.Parse(text1.text);
-                float pb2 = float.Parse(text2.text);
-                float pb3 = float.Parse(text3.text);
+                if(text1.text != "") {
+                    pb1 = float.Parse(text1.text);
+                }
+                else if(text2.text != "") {
+                    pb2 = float.Parse(text2.text);
+                }
+                else if(text3.text != "") {
+                    pb3 = float.Parse(text3.text);
 
-                if (timeLeft < pb1) {
-                    PlayerPrefs.SetFloat("Player PB3", pb2);
-                    PlayerPrefs.SetFloat("Player PB2", pb1);
-                    PlayerPrefs.SetFloat("Player PB1", timeLeft);
-                    
-                    text3.text = pb2.ToString("0.###");
-                    text2.text = pb1.ToString("0.###");
-                    text1.text = timeLeft.ToString("0.###");
                 }
-                else if (timeLeft < pb2) {
-                    PlayerPrefs.SetFloat("Player PB3", pb2);
-                    PlayerPrefs.SetFloat("Player PB2", timeLeft);
-                    text3.text = pb2.ToString("0.###");
-                    text2.text = timeLeft.ToString("0.###"); 
-                }
-                else if (timeLeft < pb3) {
-                    PlayerPrefs.SetFloat("Player PB3", timeLeft);
-                    text3.text = timeLeft.ToString("0.###");
-                }
-                else if (pb1 == 0) {
-                    PlayerPrefs.SetFloat("Player PB1", timeLeft);
-                    text1.text = timeLeft.ToString("0.###");
-                }
-                else if (timeLeft > pb1 && pb2 == 0) {
-                    PlayerPrefs.SetFloat("Player PB2", timeLeft);
-                    text2.text = timeLeft.ToString("0.###");
-                }
-                else if (timeLeft > pb2 && pb3 == 0) {
-                    PlayerPrefs.SetFloat("Player PB3", timeLeft);
-                    text3.text = timeLeft.ToString("0.###");
-                } 
 
-                if(gameOver != null) {
-                    gameOver.SetActive(true);
+                    if (timeLeft < pb1) {
+                        PlayerPrefs.SetFloat("Player PB3", pb2);
+                        PlayerPrefs.SetFloat("Player PB2", pb1);
+                        PlayerPrefs.SetFloat("Player PB1", timeLeft);
+                        
+                        text3.text = pb2.ToString("0.###");
+                        if(pb2.ToString("0.###") == "0") {
+                            text3.text = "";
+                        }
+                        text2.text = pb1.ToString("0.###");
+                        text1.text = timeLeft.ToString("0.###");
+                    }
+                    else if (timeLeft < pb2) {
+                        PlayerPrefs.SetFloat("Player PB3", pb2);
+                        PlayerPrefs.SetFloat("Player PB2", timeLeft);
+                        text3.text = pb2.ToString("0.###");
+                        text2.text = timeLeft.ToString("0.###"); 
+                    }
+                    else if (timeLeft < pb3) {
+                        PlayerPrefs.SetFloat("Player PB3", timeLeft);
+                        text3.text = timeLeft.ToString("0.###");
+                    }
+                    else if (text1.text == "") {
+                        PlayerPrefs.SetFloat("Player PB1", timeLeft);
+                        text1.text = timeLeft.ToString("0.###");
+                    }
+                    else if (timeLeft > pb1 && text2.text == "") {
+                        PlayerPrefs.SetFloat("Player PB2", timeLeft);
+                        text2.text = timeLeft.ToString("0.###");
+                    }
+                    else if (timeLeft > pb2 && text3.text == "") {
+                        PlayerPrefs.SetFloat("Player PB3", timeLeft);
+                        text3.text = timeLeft.ToString("0.###");
+                    } 
+
+                    if(gameOver != null) {
+                        gameOver.SetActive(true);
+                    }
                 }
             }
-        }
+       
     }
     void updateTimer(float currentTime) {
         // currentTime += 1;
